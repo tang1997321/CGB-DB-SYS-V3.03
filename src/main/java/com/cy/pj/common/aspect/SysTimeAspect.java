@@ -5,6 +5,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Service;
+
 import java.lang.reflect.Method;
 
 @Service
@@ -48,10 +49,10 @@ public class SysTimeAspect {
 	 * 核心业务出现异常时执行
 	 * 说明：假如有after，先执行after,再执行Throwing
 	 */
-	@AfterThrowing("doTime()")
-	public void doAfterThrowing(JoinPoint jp) {//连接点
+	@AfterThrowing(value = "doTime()", throwing = "e")
+	public void doAfterThrowing(JoinPoint jp, Exception e) {//连接点
 		MethodSignature ms = (MethodSignature) jp.getSignature();
-		System.out.println(ms.getExceptionTypes());
+		System.out.println(e.getMessage());
 		Method targetMethod = ms.getMethod();
 		System.out.println("targetMethod=" + targetMethod);
 		System.out.println("time doAfterThrowing");
