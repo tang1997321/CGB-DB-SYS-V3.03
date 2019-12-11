@@ -25,14 +25,10 @@ public interface SysUserDao extends BaseDao {
 	/**
 	 * 基于用户名、起始索引、页面大小查询数据
 	 * @param username
-	 * @param startIndex
-	 * @param pageSize
 	 * @return
 	 */
 	List<SysUserDeptVo> findPageObjects(
-			@Param("username") String username,
-			@Param("startIndex") Integer startIndex,
-			@Param("pageSize") Integer pageSize);
+			@Param("username") String username);
 	
 	/**
 	 * 插入用户数据

@@ -21,7 +21,7 @@
         select *
         <include refid="queryWhereId"/>
         order by createdTime desc
-        limit #{startIndex},#{pageSize}
+
     </select>
     <resultMap type="com.cy.pj.sys.vo.SysUserDeptVo"
                id="sysUserDeptVo">

@@ -9,6 +9,8 @@ import com.cy.pj.sys.dao.SysUserRoleDao;
 import com.cy.pj.sys.entity.SysUser;
 import com.cy.pj.sys.service.SysUserService;
 import com.cy.pj.sys.vo.SysUserDeptVo;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +42,9 @@ public class SysUserServiceImpl implements SysUserService {
 			throw new ServiceException("没有找到对应记录");
 		//3.查询当前页记录
 		int pageSize = pageProperties.getPageSize();
-		int startIndex = (pageCurrent - 1) * pageSize;
+		Page<Object> page = PageHelper.startPage(pageCurrent,pageSize);
 		List<SysUserDeptVo> records =
-				sysUserDao.findPageObjects(username,
-						startIndex, pageSize);
+				sysUserDao.findPageObjects(username);
 		//4.对查询结果进行封装并返回
 		return new PageObject<SysUserDeptVo>(records, pageCurrent, rowCount, pageSize);
 	}
