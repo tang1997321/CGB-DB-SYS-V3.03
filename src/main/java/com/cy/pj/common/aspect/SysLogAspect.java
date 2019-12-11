@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @Component 注解描述的类为spring中的一个bean对象类型(一般组件)
  * 说明:对于一个切面对象而言,可以理解为封装特定功能的一个扩展业务对象,此对象中通常会定义:
  * 1)切入点(PointCut):植入扩展功能的一个点(通常为目标方法集合)
- * 2)通知(Advice):使用于进行功能扩展的业务方法
+ * 2)通知(Advice):是用于进行功能扩展的业务方法
  */
 @Aspect
 @Component
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 public class SysLogAspect {
 	
 	//	public void logPointCut(){}//方法名随意
+	//bean(bean的名字)为切入点表达式
+	//bean(*ServiceImpl)名字末尾为ServiceImpl
 	@Pointcut("bean(sysUserServiceImpl)")
 	public void doPointCut() {
 	}
@@ -32,7 +34,7 @@ public class SysLogAspect {
 			log.info("after:" + System.currentTimeMillis());
 			return result;
 		} catch (Throwable e) {
-			log.error(e.getMessage());
+			log.error("exception:" + e.getMessage());
 			throw e;
 		}
 	}
