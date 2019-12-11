@@ -39,7 +39,7 @@
                 </form>
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix" id="pageId">
+            <div class="box-footer clearfix" id="pageId" th:insert="/common/page::page">
 
             </div>
         </div>
@@ -48,9 +48,10 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $("#pageId").load("doPageUI", function () {
-            doGetObjects();
-        });
+        // $("#pageId").load("doPageUI", function () {
+        //     doGetObjects();
+        // });
+        doGetObjects();
         $(".input-group-btn")
             .on("click", ".btn-search", doQueryObjects)
             .on("click", ".btn-add", doLoadEditUI);
