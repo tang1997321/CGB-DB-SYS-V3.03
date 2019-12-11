@@ -52,9 +52,9 @@ public class SysTimeAspect {
 	@AfterThrowing(value = "doTime()", throwing = "e")
 	public void doAfterThrowing(JoinPoint jp, Exception e) {//连接点
 		MethodSignature ms = (MethodSignature) jp.getSignature();
-		System.out.println(e.getMessage());
 		Method targetMethod = ms.getMethod();
 		System.out.println("targetMethod=" + targetMethod);
+		System.out.println("e.message" + e.getMessage());
 		System.out.println("time doAfterThrowing");
 	}
 	
