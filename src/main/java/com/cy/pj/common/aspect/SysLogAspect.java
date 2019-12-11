@@ -1,5 +1,6 @@
 package com.cy.pj.common.aspect;
 
+import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.sys.entity.SysLog;
 import com.cy.pj.sys.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,7 +36,7 @@ public class SysLogAspect {
 	//public void logPointCut(){}//方法名随意
 	//bean(bean的名字)为切入点表达式
 	//bean(*ServiceImpl)名字末尾为ServiceImpl
-	@Pointcut("bean(sysUserServiceImpl)")
+	@Pointcut("@annotation(com.cy.pj.common.annotation.RequestLog)")
 	public void doPointCut() {
 	}
 	
@@ -54,9 +54,10 @@ public class SysLogAspect {
 	private void saveLog(ProceedingJoinPoint jp, long time) throws NoSuchMethodException {
 		//1.获取用户行为日志(谁(ip+用户名)在什么时间访问了什么方法,传递什么参数,执行时间,执行什么参数)
 		//2.1获取目标方法
-		MethodSignature ms = (MethodSignature)jp.getSignature();
+		MethodSignature ms = (MethodSignature) jp.getSignature();
 		Class<?> targetClass = jp.getTarget().getClass();
-//		Method targetMethod = targetClass.getDeclaredMethod(ms.getName(), ms.getParameterTypes());
+		Method targetMethod = targetClass.getDeclaredMethod(ms.getName(), ms.getParameterTypes());
+		String operation = targetMethod.getAnnotation(RequestLog.class).operation();
 		String dType = targetClass.getName();
 		String methodName = ms.getName();
 		String targetClassMethod = dType + "." + methodName;
@@ -66,7 +67,7 @@ public class SysLogAspect {
 		SysLog log = new SysLog();
 		log.setIp("192.168.1.111");
 		log.setUsername("admin");
-		log.setOperation("operation");
+		log.setOperation(operation);
 		log.setMethod(targetClassMethod);
 		log.setParams(params);
 		log.setTime(time);

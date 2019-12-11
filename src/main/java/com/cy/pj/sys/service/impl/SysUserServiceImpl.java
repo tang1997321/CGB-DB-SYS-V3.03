@@ -1,5 +1,6 @@
 package com.cy.pj.sys.service.impl;
 
+import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.common.config.PageProperties;
 import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.util.Assert;
@@ -32,6 +33,7 @@ public class SysUserServiceImpl implements SysUserService {
 	private SysUserRoleDao sysUserRoleDao;
 	
 	@Override
+	@RequestLog(operation = "findUser")
 	public PageObject<SysUserDeptVo> findPageObjects(
 			String username, Integer pageCurrent) {
 		//1.对参数进行校验
