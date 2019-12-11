@@ -9,17 +9,19 @@ import com.cy.pj.sys.dao.SysUserRoleDao;
 import com.cy.pj.sys.entity.SysUser;
 import com.cy.pj.sys.service.SysUserService;
 import com.cy.pj.sys.vo.SysUserDeptVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
+@Slf4j
 @Service
 public class SysUserServiceImpl implements SysUserService {
 	@Autowired(required = false)
@@ -51,6 +53,7 @@ public class SysUserServiceImpl implements SysUserService {
 	@Override
 	public int validById(Integer id, Integer valid, String modifiedUser) {
 		//1.合法性验证
+		//long t1 = System.currentTimeMillis();
 		Assert.isValid(id != null && id > 0, "参数不合法");
 		Assert.isValid(valid == 1 || valid == 0, "参数不合法");
 		Assert.isEmpty(modifiedUser, "修改用户不能为空");
@@ -59,6 +62,8 @@ public class SysUserServiceImpl implements SysUserService {
 		//3.判定结果,并返回
 		if (rows == 0)
 			throw new ServiceException("此记录可能已经不存在");
+//		long t2 = System.currentTimeMillis();
+//		log.info("SysUserServiceImpl.validById execute time {}",(t2-t1));
 		return rows;
 		
 	}
