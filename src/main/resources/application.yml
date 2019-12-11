@@ -17,6 +17,8 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/pages/
     cache: false
+  aop:
+    proxy-target-class: false
 mybatis:
   configuration:
     default-statement-timeout: 30

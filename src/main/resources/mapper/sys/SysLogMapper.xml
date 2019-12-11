@@ -52,15 +52,21 @@
         </where>
     </sql>
 
-   <!-- <select id="getRowCount" resultType="int">
-        select count(*)
-        from sys_logs
-        <include refid="queryWhereId"/>
-    </select>-->
+    <!-- <select id="getRowCount" resultType="int">
+         select count(*)
+         from sys_logs
+         <include refid="queryWhereId"/>
+     </select>-->
     <select id="findPageObjects" resultType="com.cy.pj.sys.entity.SysLog">
         select *
         from sys_logs
         <include refid="queryWhereId"/>
         order by createdTime desc
     </select>
+    <insert id="insertObject">
+       insert into sys_logs
+       (username,operation,method,params,time,ip,createdTime)
+       values
+(#{username},#{operation},#{method},#{params},#{time},#{ip},#{createdTime})
+</insert>
 </mapper>

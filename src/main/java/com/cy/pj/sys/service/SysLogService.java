@@ -7,4 +7,6 @@ public interface SysLogService {
 	PageObject<SysLog> findPageObjects(String username, Integer pageCurrent);
 	
 	int deleteObjects(Integer... ids);
+	
+	void saveObject(SysLog entity);
 }

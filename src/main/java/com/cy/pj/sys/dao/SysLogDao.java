@@ -24,4 +24,5 @@ public interface SysLogDao {
 	 * @return 当前页对应的日志记录
 	 */
 	List<SysLog> findPageObjects(@Param("username") String username);//param3
+	int insertObject(SysLog entity);
 }

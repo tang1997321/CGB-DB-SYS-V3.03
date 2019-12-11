@@ -35,7 +35,7 @@ public class SysLogServiceImpl implements SysLogService {
 		
 		//2.设置查询起始位置
 		int pageSize = pageProperties.getPageSize();
-		Page<Object> page = PageHelper.startPage(pageCurrent,pageSize);
+		Page<Object> page = PageHelper.startPage(pageCurrent, pageSize);
 //		if (rowCount==0)
 //			throw new ServiceException("记录不存在");
 		//3.查询当前页日志记录
@@ -56,5 +56,10 @@ public class SysLogServiceImpl implements SysLogService {
 			throw new ServiceException("记录可能不存在");
 		}
 		return rows;
+	}
+	
+	@Override
+	public void saveObject(SysLog entity) {
+		sysLogDao.insertObject(entity);
 	}
 }
