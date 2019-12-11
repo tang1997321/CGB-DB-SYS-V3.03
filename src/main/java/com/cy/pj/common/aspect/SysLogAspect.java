@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @Aspect 注解描述的类型为一个切面类型
  * @Component 注解描述的类为spring中的一个bean对象类型(一般组件)
  * 说明:对于一个切面对象而言,可以理解为封装特定功能的一个扩展业务对象,此对象中通常会定义:
- * 1)切入点(PointCut):植入扩展功能的一个点(通常为目标方法集合)
+ * 1)切入点(PointCut):织入扩展功能的一个点(通常为目标方法集合)
  * 2)通知(Advice):是用于进行功能扩展的业务方法
  */
 @Aspect
