@@ -12,9 +12,7 @@ import com.cy.pj.sys.vo.SysUserDeptVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.UUID;
 @Service
 public class SysUserServiceImpl implements SysUserService {
 	@Autowired(required = false)
-	private SysUserDao sysUserDao;
+	private SysUserDao sysUserDao;//依赖,DIP原则,依赖倒置,单一职责原则
 	@Autowired
 	private PageProperties pageProperties;
 	@Autowired(required = false)
@@ -52,8 +50,14 @@ public class SysUserServiceImpl implements SysUserService {
 	
 	@Override
 	public int validById(Integer id, Integer valid, String modifiedUser) {
-		//1.合法性验证
+		//启动工作线程
+		//获取缓存,更新线程
+		//获得登录用户
+		//获取用户权限
+		//检查用户权限中是否包含此方法的权限
+		//不包含则抛出异常
 		//long t1 = System.currentTimeMillis();
+		//1.合法性验证
 		Assert.isValid(id != null && id > 0, "参数不合法");
 		Assert.isValid(valid == 1 || valid == 0, "参数不合法");
 		Assert.isEmpty(modifiedUser, "修改用户不能为空");
@@ -64,6 +68,9 @@ public class SysUserServiceImpl implements SysUserService {
 			throw new ServiceException("此记录可能已经不存在");
 //		long t2 = System.currentTimeMillis();
 //		log.info("SysUserServiceImpl.validById execute time {}",(t2-t1));
+		//提交事务
+		//回滚事务
+		//3.返回结果
 		return rows;
 		
 	}
@@ -126,7 +133,7 @@ public class SysUserServiceImpl implements SysUserService {
 //		Assert.isValid(emailRows <= 1, "邮箱重复");
 //		Assert.isValid(mobileRows <= 1, "电话重复");
 		int rows = sysUserDao.updateObject(entity);
-		sysUserRoleDao.deleteById("sys_user_roles","user_id",entity.getId());
+		sysUserRoleDao.deleteById("sys_user_roles", "user_id", entity.getId());
 		sysUserRoleDao.insertObjects(entity.getId(), roleIds);
 		return rows;
 	}
@@ -134,7 +141,7 @@ public class SysUserServiceImpl implements SysUserService {
 	@Override
 	public int isExists(String columnName, String columnValue) {
 		//1.参数校验
-		Assert.isEmpty(columnValue,"字段值不正确");
+		Assert.isEmpty(columnValue, "字段值不正确");
 		//2.基于字段以及值进行统计查询
 		int rows = sysUserDao.isExist("sys_users", columnName, columnValue);
 		return rows;
