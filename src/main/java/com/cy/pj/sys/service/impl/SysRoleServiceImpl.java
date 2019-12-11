@@ -29,6 +29,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	private SysUserRoleDao sysUserRoleDao;
 	
 	@Override
+	@RequestLog(operation = "删除角色")
 	public int deleteObject(Integer id) {
 		//1.参数校验
 		Assert.isValid(id != null && id > 0, "请先选择");
@@ -44,6 +45,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 	
 	@Override
+	@RequestLog(operation = "显示角色")
 	public PageObject findPageObjects(String name, Integer pageCurrent) {
 		//1.参数校验
 		Assert.isValid(pageCurrent != null && pageCurrent > 0, "页码值无效");
@@ -60,6 +62,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 	
 	@Override
+	@RequestLog(operation = "保存角色")
 	public int saveObject(SysRole entity, Integer[] menuIds) {
 		//1.校验参数
 		Assert.isNull(entity, "保存对象不能为空");
@@ -73,6 +76,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 	
 	@Override
+	@RequestLog(operation = "id查询")
 	public SysRoleMenuVo findObjectById(Integer id) {
 		//1.合法性验证
 		Assert.isValid(id != null && id > 0, "id的值不合法");
@@ -87,6 +91,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 	
 	@Override
+	@RequestLog(operation = "更新角色")
 	public int updateObject(SysRole entity, Integer[] menuIds) {
 		//1.校验参数
 		Assert.isNull(entity, "保存对象不能为空");
@@ -101,6 +106,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 	}
 	
 	@Override
+	@RequestLog(operation = "选择树")
 	public List<CheckBox> findObjects() {
 		return sysRoleDao.findObjects();
 	}

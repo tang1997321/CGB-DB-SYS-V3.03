@@ -33,7 +33,7 @@ public class SysUserServiceImpl implements SysUserService {
 	private SysUserRoleDao sysUserRoleDao;
 	
 	@Override
-	@RequestLog(operation = "findUser")
+	@RequestLog(operation = "查询用户")
 	public PageObject<SysUserDeptVo> findPageObjects(
 			String username, Integer pageCurrent) {
 		//1.对参数进行校验
@@ -52,6 +52,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 	
 	@Override
+	@RequestLog(operation = "参数检查")
 	public int validById(Integer id, Integer valid, String modifiedUser) {
 		//启动工作线程
 		//获取缓存,更新线程
@@ -79,6 +80,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 	
 	@Override
+	@RequestLog(operation = "保存用户")
 	public int saveObject(SysUser entity, Integer[] roleIds) {
 		//1.参数校验
 		Assert.isNull(entity, "保存对象不能为空");
@@ -113,6 +115,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 	
 	@Override
+	@RequestLog(operation = "id查找")
 	public Map<String, Object> findObjectById(Integer userId) {
 		Assert.isValid(userId != null && userId > 0, "参数数据不合法");
 		SysUserDeptVo user = sysUserDao.findObjectById(userId);
@@ -125,6 +128,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 	
 	@Override
+	@RequestLog(operation = "更新用户")
 	public int updateObject(SysUser entity, Integer[] roleIds) {
 		Assert.isNull(entity, "保存对象不能为空");
 		Assert.isEmpty(entity.getUsername(), "用户名不能为空");
@@ -142,6 +146,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 	
 	@Override
+	@RequestLog(operation = "重复值查询")
 	public int isExists(String columnName, String columnValue) {
 		//1.参数校验
 		Assert.isEmpty(columnValue, "字段值不正确");

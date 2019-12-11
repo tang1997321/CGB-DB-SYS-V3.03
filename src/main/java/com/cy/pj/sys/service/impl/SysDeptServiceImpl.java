@@ -1,5 +1,6 @@
 package com.cy.pj.sys.service.impl;
 
+import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.common.annotation.RequiredCache;
 import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.vo.Node;
@@ -20,6 +21,7 @@ public class SysDeptServiceImpl implements SysDeptService {
 	
 	@RequiredCache
 	@Override
+	@RequestLog(operation = "列出部门")
 	public List<Map<String, Object>> findObjects() {
 		List<Map<String, Object>> list =
 				sysDeptDao.findObjects();
@@ -29,6 +31,7 @@ public class SysDeptServiceImpl implements SysDeptService {
 	}
 	
 	@Override
+	@RequestLog(operation = "查询树")
 	public List<Node> findZTreeNodes() {
 		List<Node> list =
 				sysDeptDao.findZTreeNodes();
@@ -38,6 +41,7 @@ public class SysDeptServiceImpl implements SysDeptService {
 	}
 	
 	@Override
+	@RequestLog(operation = "更新部门")
 	public int updateObject(SysDept entity) {
 		//1.合法验证
 		if (entity == null)
@@ -57,6 +61,7 @@ public class SysDeptServiceImpl implements SysDeptService {
 	}
 	
 	@Override
+	@RequestLog(operation = "保存部门")
 	public int saveObject(SysDept entity) {
 		//1.合法验证
 		if (entity == null)
@@ -72,6 +77,7 @@ public class SysDeptServiceImpl implements SysDeptService {
 	}
 	
 	@Override
+	@RequestLog(operation = "删除部门")
 	public int deleteObject(Integer id) {
 		//1.合法性验证
 		if (id == null || id <= 0)

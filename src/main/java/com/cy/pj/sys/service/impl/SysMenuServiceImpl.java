@@ -1,5 +1,6 @@
 package com.cy.pj.sys.service.impl;
 
+import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.util.Assert;
 import com.cy.pj.common.vo.Node;
@@ -23,6 +24,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	private SysRoleMenuDao sysRoleMenuDao;
 	
 	@Override
+	@RequestLog(operation = "删除菜单")
 	public int deleteObject(Integer id) {
 		//1.判定参数有效性
 		Assert.isValid(id != null && id > 1, "id值无效");
@@ -41,6 +43,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 	
 	@Override
+	@RequestLog(operation = "列出菜单")
 	public List<Map<String, Object>> findObjects() {
 		List<Map<String, Object>> list = sysMenuDao.findObjects();
 		if (list == null || list.size() == 0) {
@@ -55,6 +58,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 	
 	@Override
+	@RequestLog(operation = "保存菜单")
 	public int saveObject(SysMenu entity) {
 		//1.参数校验
 		Assert.isNull(entity,"保存对象不能为空");
@@ -65,6 +69,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 		return rows;
 	}
 	@Override
+	@RequestLog(operation = "更新菜单")
 	public int updateObject(SysMenu entity) {
 		//1.参数校验
 		Assert.isNull(entity,"保存对象不能为空");
