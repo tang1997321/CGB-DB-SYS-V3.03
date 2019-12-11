@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SysCacheAspect {
 	@Pointcut("@annotation(com.cy.pj.common.annotation.RequiredCache)")
-	public void doCache(){};
+	public void doCache() {
+	}
+	
 	@Around("doCache()")
-	public Object around(ProceedingJoinPoint jp) throws Throwable{
+	public Object around(ProceedingJoinPoint jp) throws Throwable {
 		System.out.println("get data from cache");
 		Object obj = jp.proceed();
 		System.out.println("put data from cache");

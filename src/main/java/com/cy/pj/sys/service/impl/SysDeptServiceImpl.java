@@ -92,6 +92,4 @@ public class SysDeptServiceImpl implements SysDeptService {
 			throw new ServiceException("此信息可能已经不存在");
 		return rows;
 	}
-	
-	
 }
