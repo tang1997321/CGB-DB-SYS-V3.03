@@ -13,7 +13,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -26,7 +25,7 @@ import java.util.Date;
  * 1)切入点(PointCut):织入扩展功能的一个点(通常为目标方法集合)
  * 2)通知(Advice):是用于进行功能扩展的业务方法
  */
-@Order(1)//切面的优先级,数字越小,优先级越高
+//@Order(1)//切面的优先级,数字越小,优先级越高
 @Aspect
 @Component
 @Slf4j
@@ -84,6 +83,7 @@ public class SysLogAspect {
 		log.setTime(time);
 		log.setCreatedTime(new Date());
 		//3.将信息写入到数据库
+//		new Thread(() -> sysLogService.saveObject(log)).start();
 		sysLogService.saveObject(log);
 	}
 }

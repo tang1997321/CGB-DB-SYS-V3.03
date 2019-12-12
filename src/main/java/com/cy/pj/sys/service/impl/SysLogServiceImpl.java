@@ -9,7 +9,9 @@ import com.cy.pj.sys.service.SysLogService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -21,6 +23,7 @@ import java.util.List;
  * 1)核心业务(数据和业务的基本操作)
  * 2)扩展业务(权限控制,缓存,异步,...)
  */
+@Transactional//交给spring管理事务,业务层的事务控制
 @Service
 public class SysLogServiceImpl implements SysLogService {
 	@Autowired(required = false)
@@ -44,7 +47,7 @@ public class SysLogServiceImpl implements SysLogService {
 		//4.封装结果并返回
 		return new PageObject<>(records, pageCurrent, (int) page.getTotal(), pageSize);
 	}
-	@Transactional//交给spring管理事务,业务层的事务控制
+	
 	@Override
 	public int deleteObjects(Integer... ids) {
 		//1.参数校验
@@ -59,8 +62,16 @@ public class SysLogServiceImpl implements SysLogService {
 		return rows;
 	}
 	
+	/**
+	 * @Async
+	 *
+	 * @param entity
+	 */
+	@Async
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Override
 	public void saveObject(SysLog entity) {
+		System.out.println(Thread.currentThread().getName());
 		sysLogDao.insertObject(entity);
 	}
 }

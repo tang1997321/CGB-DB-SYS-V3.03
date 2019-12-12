@@ -19,6 +19,15 @@ spring:
     cache: false
   aop:
     proxy-target-class: false
+  task:
+    execution:
+      pool:
+        core-size: 16
+        max-size: 1000
+        queue-capacity: 2000
+        allow-core-thread-timeout: false
+        keep-alive: 30
+      thread-name-prefix: db-service-thread-
 mybatis:
   configuration:
     default-statement-timeout: 30

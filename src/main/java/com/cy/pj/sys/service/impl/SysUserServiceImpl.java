@@ -36,10 +36,11 @@ public class SysUserServiceImpl implements SysUserService {
 	private SysUserRoleDao sysUserRoleDao;
 	
 	@Override
-	@Transactional(readOnly = true)
 	@RequestLog(operation = "查询用户")
+	@Transactional(readOnly = true)
 	public PageObject<SysUserDeptVo> findPageObjects(
 			String username, Integer pageCurrent) {
+		System.out.println(Thread.currentThread().getName());
 		//1.对参数进行校验
 		Assert.isValid(pageCurrent != null && pageCurrent > 0, "当前页码值无效");
 		//2.查询总记录数并进行校验
