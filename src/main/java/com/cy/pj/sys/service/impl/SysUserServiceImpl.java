@@ -52,7 +52,7 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 	
 	@Override
-	@RequestLog(operation = "参数检查")
+	@RequestLog(operation = "禁用启用")
 	public int validById(Integer id, Integer valid, String modifiedUser) {
 		//启动工作线程
 		//获取缓存,更新线程

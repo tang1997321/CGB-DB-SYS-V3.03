@@ -1,8 +1,11 @@
 package com.cy.pj.common.aspect;
 
 import com.cy.pj.common.annotation.RequestLog;
+import com.cy.pj.common.util.IPUtils;
 import com.cy.pj.sys.entity.SysLog;
 import com.cy.pj.sys.service.SysLogService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,7 +17,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -51,21 +53,30 @@ public class SysLogAspect {
 	}
 	
 	//将用户星系存储到数据库中
-	private void saveLog(ProceedingJoinPoint jp, long time) throws NoSuchMethodException {
+	private void saveLog(ProceedingJoinPoint jp, long time) throws NoSuchMethodException, JsonProcessingException {
 		//1.获取用户行为日志(谁(ip+用户名)在什么时间访问了什么方法,传递什么参数,执行时间,执行什么参数)
 		//2.1获取目标方法
+		//2.1.1获取方法签名(记录的是目标方法的签名)
 		MethodSignature ms = (MethodSignature) jp.getSignature();
+		//2.1.2获取目标类型的字节码对象
 		Class<?> targetClass = jp.getTarget().getClass();
+		//2.1.3获取目标方法对象
 		Method targetMethod = targetClass.getDeclaredMethod(ms.getName(), ms.getParameterTypes());
-		String operation = targetMethod.getAnnotation(RequestLog.class).operation();
+		//2.1.4获取目标方法上的注解
+		RequestLog rLog = targetMethod.getAnnotation(RequestLog.class);
+		//2.1.5获取操作名
+		String operation = rLog.operation();
+		//2.1.6获取方法全名
 		String dType = targetClass.getName();
 		String methodName = ms.getName();
 		String targetClassMethod = dType + "." + methodName;
 		//2.2获取方法参数
-		String params = Arrays.toString(jp.getArgs());
+		//String params = Arrays.toString(jp.getArgs());
+		//值为json格式会自动转换
+		String params = new ObjectMapper().writeValueAsString(jp.getArgs());
 		//2.对信息进行封装(SysLog)
 		SysLog log = new SysLog();
-		log.setIp("192.168.1.111");
+		log.setIp(IPUtils.getIpAddr());
 		log.setUsername("admin");
 		log.setOperation(operation);
 		log.setMethod(targetClassMethod);
