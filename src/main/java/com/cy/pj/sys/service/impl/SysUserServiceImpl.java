@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@Transactional(timeout = 30,rollbackFor = Throwable.class,isolation = Isolation.READ_COMMITTED,readOnly = false)
 public class SysUserServiceImpl implements SysUserService {
 	@Autowired(required = false)
 	private SysUserDao sysUserDao;//依赖,DIP原则,依赖倒置,单一职责原则
@@ -33,6 +36,7 @@ public class SysUserServiceImpl implements SysUserService {
 	private SysUserRoleDao sysUserRoleDao;
 	
 	@Override
+	@Transactional(readOnly = true)
 	@RequestLog(operation = "查询用户")
 	public PageObject<SysUserDeptVo> findPageObjects(
 			String username, Integer pageCurrent) {

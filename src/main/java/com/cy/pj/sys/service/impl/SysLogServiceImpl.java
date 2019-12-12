@@ -10,6 +10,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class SysLogServiceImpl implements SysLogService {
 		//4.封装结果并返回
 		return new PageObject<>(records, pageCurrent, (int) page.getTotal(), pageSize);
 	}
-	
+	@Transactional//交给spring管理事务,业务层的事务控制
 	@Override
 	public int deleteObjects(Integer... ids) {
 		//1.参数校验
