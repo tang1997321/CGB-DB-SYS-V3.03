@@ -63,7 +63,7 @@ public class SysLogServiceImpl implements SysLogService {
 	}
 	
 	/**
-	 * @Async
+	 * @Async 开启线程
 	 *
 	 * @param entity
 	 */

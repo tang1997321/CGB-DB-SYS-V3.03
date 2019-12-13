@@ -9,6 +9,8 @@ import com.cy.pj.sys.dao.SysRoleMenuDao;
 import com.cy.pj.sys.entity.SysMenu;
 import com.cy.pj.sys.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.util.StringUtils;
@@ -23,6 +25,14 @@ public class SysMenuServiceImpl implements SysMenuService {
 	@Autowired(required = false)
 	private SysRoleMenuDao sysRoleMenuDao;
 	
+	/**
+	 * @CacheEvict 描述方法是,表示要清除缓存
+	 * 1)value:表示缓存名称
+	 * 2)allEntries:表示清空所有缓存
+	 * @param id
+	 * @return
+	 */
+	@CacheEvict(value = "menuCache",allEntries = true)
 	@Override
 	@RequestLog(operation = "删除菜单")
 	public int deleteObject(Integer id) {
@@ -42,6 +52,13 @@ public class SysMenuServiceImpl implements SysMenuService {
 		return rows;
 	}
 	
+	/**
+	 * @Cacheable 注解描述方法是,表示要从cache取数据,cache没有调用业务方法查数据
+	 * 查到数据放到cache中(cache底层实现了一个map接口)
+	 * 1)value表示cache的名字
+	 * @return
+	 */
+	@Cacheable(value = "menuCache")//放入缓存
 	@Override
 	@RequestLog(operation = "列出菜单")
 	public List<Map<String, Object>> findObjects() {
