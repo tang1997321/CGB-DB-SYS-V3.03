@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cy.pj.sys.dao.SysRoleDao">
+    <cache/>
     <sql id="queryWhereId">
         <where>
             <if test="name!=null and name!=''">
@@ -22,7 +23,6 @@
         from sys_roles
         <include refid="queryWhereId"/>
         order by createdTime desc
-        limit #{startIndex},#{pageSize}
     </select>
     <!--持久化角色自身信息
     其中:useGeneratedKeys表示使用insert操作执行以后的主键值KeyProperty表示将主键值赋值给参数对象SysRole的id属性-->

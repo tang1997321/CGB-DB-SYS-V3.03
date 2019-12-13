@@ -1,5 +1,7 @@
 package com.cy.pj.sys.dao;
 
+import com.cy.pj.sys.entity.SysRole;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.Test;
@@ -37,7 +39,18 @@ public class DaoCacheTests {
 //		session.close();//session事务提交或close时才会向二级缓存存数据
 		session = sqlSessionFactory.openSession();
 		List<Object> records02 = session.selectList("com.cy.pj.sys.dao.SysMenuDao.findObjects");
+		System.out.println(records01 == records02);
 		//3.释放资源
 		session.close();
+	}
+	@Test
+	public void testSecondLevelCache02() {
+		SqlSession session1 = sqlSessionFactory.openSession();
+		SqlSession session2 = sqlSessionFactory.openSession();
+		List<SysRole> selectList1 = session1.selectList("com.cy.pj.sys.dao.SysRoleDao.findPageObjects", "java");
+		session1.close();
+		List<SysRole> selectList2 = session2.selectList("com.cy.pj.sys.dao.SysRoleDao.findPageObjects", "java");
+		session2.close();
+		System.out.println(session1 == session2);
 	}
 }
