@@ -50,7 +50,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 			throw new ServiceException("记录已经不存在");
 		//5.返回结果
 		return rows;
-	}
+ 	}
 	
 	/**
 	 * @Cacheable 注解描述方法是,表示要从cache取数据,cache没有调用业务方法查数据
@@ -58,7 +58,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * 1)value表示cache的名字
 	 * @return
 	 */
-	@Cacheable(value = "menuCache")//放入缓存
+	@Cacheable(value = "menuCache")//spring框架负责提供cache;ConcurrentHashMap
 	@Override
 	@RequestLog(operation = "列出菜单")
 	public List<Map<String, Object>> findObjects() {

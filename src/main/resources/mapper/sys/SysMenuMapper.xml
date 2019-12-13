@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cy.pj.sys.dao.SysMenuDao">
+    <!--cache表示本命名空间使用二级缓存-->
+    <cache/>
     <select id="findObjects" resultType="map">
 --           方案1(左外查询)
 --           select c.*,p.name parentName

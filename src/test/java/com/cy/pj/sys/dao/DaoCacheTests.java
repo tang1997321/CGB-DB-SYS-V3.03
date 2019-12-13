@@ -12,24 +12,29 @@ import java.util.List;
 public class DaoCacheTests {
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
-	//默认一级缓存为SqlSession对象私有,多个SqlSession之间不会共享一个空间
+	
+	//测试mybatis一级缓存(localC ache):sqlSession对象私有缓存(BaseExecutor)
 	@Test
-	public void testFirstCache() {
+	public void testFirstCache() {//默认一级缓存为SqlSession对象私有,多个SqlSession之间不会共享一个空间
 		//1.创建session对象
 		SqlSession session = sqlSessionFactory.openSession();
 		//2.访问数据库
 		List<Object> records01 = session.selectList("com.cy.pj.sys.dao.SysMenuDao.findObjects");
-		session = sqlSessionFactory.openSession();
+//		session = sqlSessionFactory.openSession();
 		List<Object> records02 = session.selectList("com.cy.pj.sys.dao.SysMenuDao.findObjects");
 		//3.释放资源
 		session.close();
 	}
+	
+	//测试mybatis中的二级缓存;可以多个sqlSession对象共性的缓存,二级缓存对象的key与命名空间有关
 	@Test
-	public void testSecondCache(){
+	public void testSecondCache() {
 		//1.创建session对象
 		SqlSession session = sqlSessionFactory.openSession();
 		//2.访问数据库
 		List<Object> records01 = session.selectList("com.cy.pj.sys.dao.SysMenuDao.findObjects");
+		session.commit();
+//		session.close();//session事务提交或close时才会向二级缓存存数据
 		session = sqlSessionFactory.openSession();
 		List<Object> records02 = session.selectList("com.cy.pj.sys.dao.SysMenuDao.findObjects");
 		//3.释放资源
