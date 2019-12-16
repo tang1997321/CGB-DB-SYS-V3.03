@@ -18,6 +18,7 @@ public class PageController {
 		//此类型的对象线程安全?(如何保证的?底层CAS算法-借助CPU硬件优势)
 		System.out.println("PageController");
 	}
+	
 	//rest风格(一种软件架构编码风格)的url映射
 	//{}表为rest表达式
 	//@pathVariable用于告诉spring mvc参数值从url中获取
@@ -25,10 +26,15 @@ public class PageController {
 	public String doModuleUI(@PathVariable String moduleUI) {
 		return "sys/" + moduleUI;
 	}
-//	@RequestMapping("menu/menu_list")
+	
+	//	@RequestMapping("menu/menu_list")
 //	public String doMenuUI() {
 //		return "sys/menu_list";
 //	}
+	@RequestMapping("doLoginUI")
+	public String doLoginUI() {
+		return "login";
+	}
 	
 	@RequestMapping("doIndexUI")
 	public String doGoodsUI() {

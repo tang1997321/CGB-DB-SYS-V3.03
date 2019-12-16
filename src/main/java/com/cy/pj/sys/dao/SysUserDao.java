@@ -51,4 +51,11 @@ public interface SysUserDao extends BaseDao {
 	 */
 	int updateObject(SysUser entity);
 	
+	/**
+	 * 基于用户名查找用户信息
+	 * @param username
+	 * @return
+	 */
+	@Select("select * from sys_users where username=#{username}")
+	SysUser findUserByUserName(String username);
 }

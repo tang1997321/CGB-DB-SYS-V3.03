@@ -3,6 +3,9 @@ package com.cy.pj.sys.controller;
 import com.cy.pj.common.vo.JsonResult;
 import com.cy.pj.sys.entity.SysUser;
 import com.cy.pj.sys.service.SysUserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,5 +55,12 @@ public class SysUserController {
 	public JsonResult doUpdateObject(SysUser entity, Integer[] roleIds) {
 		sysUserService.updateObject(entity, roleIds);
 		return new JsonResult("update ok");
+	}
+	@RequestMapping("doLogin")
+	public JsonResult doLogin(String username, String password) {
+		Subject subject = SecurityUtils.getSubject();
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		subject.login(token);//提交给securityManager
+		return new JsonResult("login ok");
 	}
 }
