@@ -1,15 +1,13 @@
 package com.cy.pj.common.config;
 
+import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 import java.util.LinkedHashMap;
 
@@ -30,7 +28,7 @@ public class SpringShiroConfig {
 		sManager.setRealm(realm);
 		return sManager;
 	}
-	
+
 	/**
 	 * 配置过滤器工厂(通过此工厂创建大量过滤器,通过过滤器对请求进行过滤)
 	 */
@@ -57,19 +55,19 @@ public class SpringShiroConfig {
 		return fBean;
 	}
 	
-//	//配置bean对象的生命周期管理(SpringBoot可以不配置)。
+		//配置bean对象的生命周期管理(SpringBoot可以不配置)。
 //	@Bean
 //	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
 //		return new LifecycleBeanPostProcessor();
 //	}
 //
-//	//通过如下配置要为目标业务对象创建代理对象（SpringBoot中可省略）。
+	//通过如下配置要为目标业务对象创建代理对象（SpringBoot中可省略）。
 //	@DependsOn("lifecycleBeanPostProcessor")
 //	@Bean
 //	public DefaultAdvisorAutoProxyCreator newDefaultAdvisorAutoProxyCreator() {
 //		return new DefaultAdvisorAutoProxyCreator();
 //	}
-	
+
 	//配置授权的advisor,通过此advisor告诉框架底层,要为指定的对象创建代理对象,然后对指定业务方法进行授权检查
 	@Bean
 	public AuthorizationAttributeSourceAdvisor newAuthorizationAttributeSourceAdvisor(SecurityManager securityManager) {
@@ -77,4 +75,5 @@ public class SpringShiroConfig {
 		advisor.setSecurityManager(securityManager);
 		return advisor;
 	}
+	
 }

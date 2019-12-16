@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,9 +34,11 @@ public class ShiroUserRealm extends AuthorizingRealm {
 	@Autowired(required = false)
 	private SysMenuDao sysMenuDao;
 	
-	/**
-	 * 此方法负责用户信息的获取以及封装
-	 */
+	
+
+/**
+ * 此方法负责用户信息的获取以及封装
+ */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		//1.获取用户端输入的用户信息
@@ -59,7 +62,7 @@ public class ShiroUserRealm extends AuthorizingRealm {
 		//6.返回封装结果
 		return info;//返回值会传递给认证管理器(SecurityManager)(后续认证管理器会通过此信息完成认证操作)
 	}
-	
+
 	/**
 	 * 设置加密算法
 	 * 设置凭证匹配器(与用户添加操作使用相同的加密算法)
@@ -74,7 +77,7 @@ public class ShiroUserRealm extends AuthorizingRealm {
 		cMatcher.setHashIterations(1);
 		super.setCredentialsMatcher(cMatcher);
 	}
-	
+
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		//1.获取登录用户id

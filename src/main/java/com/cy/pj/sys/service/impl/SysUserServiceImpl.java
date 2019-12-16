@@ -4,7 +4,7 @@ import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.common.config.PageProperties;
 import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.util.Assert;
-import com.cy.pj.common.util.ShiroUtil1;
+import com.cy.pj.common.util.ShiroUtil;
 import com.cy.pj.common.vo.PageObject;
 import com.cy.pj.sys.dao.SysUserDao;
 import com.cy.pj.sys.dao.SysUserRoleDao;
@@ -14,6 +14,7 @@ import com.cy.pj.sys.vo.SysUserDeptVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,7 @@ public class SysUserServiceImpl implements SysUserService {
 		return new PageObject<SysUserDeptVo>(records, pageCurrent, rowCount, pageSize);
 	}
 	
-//	@RequiresPermissions("sys:user:update")
+	@RequiresPermissions("sys:user:update")
 	@Override
 	@RequestLog(operation = "禁用启用")
 	public int validById(Integer id, Integer valid, String modifiedUser) {
@@ -173,7 +174,7 @@ public class SysUserServiceImpl implements SysUserService {
 		Assert.isValid(!newPassword.equals(password), "两次密码输入不能一致");
 		Assert.isValid(newPassword.equals(cfgPassword), "两次密码输入不一致");
 		//检查原密码是否正确
-		SysUser user = ShiroUtil1.getLoginUser();
+		SysUser user = ShiroUtil.getLoginUser();
 		String salt = user.getSalt();
 		String hashedPwd = new SimpleHash("MD5", password, salt, 1).toHex();
 		Assert.isValid(user.getPassword().equals(hashedPwd), "原密码不正确");
