@@ -58,7 +58,7 @@ public class SysUserServiceImpl implements SysUserService {
 		return new PageObject<SysUserDeptVo>(records, pageCurrent, rowCount, pageSize);
 	}
 	
-	@RequiresPermissions("sys:user:update")
+//	@RequiresPermissions("sys:user:update")
 	@Override
 	@RequestLog(operation = "禁用启用")
 	public int validById(Integer id, Integer valid, String modifiedUser) {
