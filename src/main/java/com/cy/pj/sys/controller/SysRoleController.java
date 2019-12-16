@@ -5,6 +5,7 @@ import com.cy.pj.sys.entity.SysRole;
 import com.cy.pj.sys.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,7 +49,7 @@ public class SysRoleController {
 		return new JsonResult(sysRoleService.findObjectById(id));
 	}
 	@RequestMapping("doUpdateObject")
-	public JsonResult doUpdateObject(SysRole entity, Integer[] menuIds) {
+	public JsonResult doUpdateObject(SysRole entity, @RequestParam("menuIds") Integer[] menuIds) {
 		sysRoleService.updateObject(entity, menuIds);
 		return new JsonResult("update ok");
 	}

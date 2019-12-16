@@ -24,8 +24,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(ShiroException.class)
-	public JsonResult doHandleShiroException(
-			ShiroException e) {
+	public JsonResult doHandleShiroException(ShiroException e) {
 		JsonResult r = new JsonResult();
 		r.setState(0);
 		if (e instanceof UnknownAccountException) {

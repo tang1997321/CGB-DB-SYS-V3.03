@@ -5,6 +5,7 @@ import com.cy.pj.sys.vo.SysUserDeptVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public interface SysUserDao extends BaseDao {
 	
 	/**
 	 * 根据id禁用用户
+	 *
 	 * @param id
 	 * @param valid
 	 * @param modifiedUser
@@ -24,6 +26,7 @@ public interface SysUserDao extends BaseDao {
 	
 	/**
 	 * 基于用户名、起始索引、页面大小查询数据
+	 *
 	 * @param username
 	 * @return
 	 */
@@ -32,6 +35,7 @@ public interface SysUserDao extends BaseDao {
 	
 	/**
 	 * 插入用户数据
+	 *
 	 * @param entity
 	 * @return
 	 */
@@ -39,6 +43,7 @@ public interface SysUserDao extends BaseDao {
 	
 	/**
 	 * 基于用户id查询信息
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -46,6 +51,7 @@ public interface SysUserDao extends BaseDao {
 	
 	/**
 	 * 基于用户信息更新数据
+	 *
 	 * @param entity
 	 * @return
 	 */
@@ -58,4 +64,7 @@ public interface SysUserDao extends BaseDao {
 	 */
 	@Select("select * from sys_users where username=#{username}")
 	SysUser findUserByUserName(String username);
+	
+	@Update("update sys_users set password=#{newPassword},salt=#{salt},modifiedTime=now() where id=#{id}")
+	int updatePassword(@Param("newPassword") String newPassword, @Param("salt") String salt, @Param("id") Integer id);
 }

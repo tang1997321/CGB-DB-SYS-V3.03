@@ -36,4 +36,17 @@ createdTime,modifiedTime,createdUser,modifiedUser)
            modifiedTime=now()
         where id=#{id}
     </update>
+    <!--基于菜单id查询菜单标识-->
+    <select id="findPermissions"
+            resultType="string">
+        select permission <!-- sys:user:update -->
+        from sys_menus
+        where
+        <foreach collection="menuIds"
+                 separator="or"
+                 item="mwnuId">
+            id =#{menuId}
+        </foreach>
+    </select>
+
 </mapper>

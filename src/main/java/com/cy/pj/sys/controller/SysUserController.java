@@ -56,6 +56,7 @@ public class SysUserController {
 		sysUserService.updateObject(entity, roleIds);
 		return new JsonResult("update ok");
 	}
+	
 	@RequestMapping("doLogin")
 	public JsonResult doLogin(String username, String password) {
 		Subject subject = SecurityUtils.getSubject();
@@ -63,4 +64,11 @@ public class SysUserController {
 		subject.login(token);//提交给securityManager
 		return new JsonResult("login ok");
 	}
+	
+	@RequestMapping("doUpdatePassword")
+	public JsonResult doUpdatePassword(String pwd, String newPwd, String cfgPwd) {
+		sysUserService.updatePassword(pwd, newPwd, cfgPwd);
+		return new JsonResult("update ok");
+	}
+	
 }

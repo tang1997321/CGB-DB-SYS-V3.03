@@ -4,6 +4,7 @@ import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.common.config.PageProperties;
 import com.cy.pj.common.exception.ServiceException;
 import com.cy.pj.common.util.Assert;
+import com.cy.pj.common.util.ShiroUtil;
 import com.cy.pj.common.vo.PageObject;
 import com.cy.pj.sys.dao.SysUserDao;
 import com.cy.pj.sys.dao.SysUserRoleDao;
@@ -13,6 +14,7 @@ import com.cy.pj.sys.vo.SysUserDeptVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@Transactional(timeout = 30,rollbackFor = Throwable.class,isolation = Isolation.READ_COMMITTED,readOnly = false)
+@Transactional(timeout = 30, rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED, readOnly = false)
 public class SysUserServiceImpl implements SysUserService {
 	@Autowired(required = false)
 	private SysUserDao sysUserDao;//依赖,DIP原则,依赖倒置,单一职责原则
@@ -49,13 +51,14 @@ public class SysUserServiceImpl implements SysUserService {
 			throw new ServiceException("没有找到对应记录");
 		//3.查询当前页记录
 		int pageSize = pageProperties.getPageSize();
-		Page<Object> page = PageHelper.startPage(pageCurrent,pageSize);
+		Page<Object> page = PageHelper.startPage(pageCurrent, pageSize);
 		List<SysUserDeptVo> records =
 				sysUserDao.findPageObjects(username);
 		//4.对查询结果进行封装并返回
 		return new PageObject<SysUserDeptVo>(records, pageCurrent, rowCount, pageSize);
 	}
 	
+	@RequiresPermissions("sys:user:update")
 	@Override
 	@RequestLog(operation = "禁用启用")
 	public int validById(Integer id, Integer valid, String modifiedUser) {
@@ -158,5 +161,29 @@ public class SysUserServiceImpl implements SysUserService {
 		//2.基于字段以及值进行统计查询
 		int rows = sysUserDao.isExist("sys_users", columnName, columnValue);
 		return rows;
+	}
+	
+	@Override
+	public void updatePassword(String password,
+	                           String newPassword,
+	                           String cfgPassword) {
+		//1.参数校验
+		Assert.isEmpty(password, "原密码不能为空");
+		Assert.isEmpty(newPassword, "新密码不能为空");
+		System.out.println(password + newPassword + cfgPassword);
+		Assert.isValid(!newPassword.equals(password), "两次密码输入不能一致");
+		Assert.isValid(newPassword.equals(cfgPassword), "两次密码输入不一致");
+		//检查原密码是否正确
+		SysUser user = ShiroUtil.getLoginUser();
+		String salt = user.getSalt();
+		String hashedPwd = new SimpleHash("MD5", password, salt, 1).toHex();
+		Assert.isValid(user.getPassword().equals(hashedPwd), "原密码不正确");
+		//2.更新密码
+		salt = UUID.randomUUID().toString();
+		String newHashedPwd = new SimpleHash("MD5", newPassword, salt, 1).toHex();
+		int rows = sysUserDao.updatePassword(newHashedPwd, salt, user.getId());
+		//3.
+		if (rows == 0)
+			throw new ServiceException("修改失败");
 	}
 }

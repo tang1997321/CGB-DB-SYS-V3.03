@@ -20,4 +20,16 @@
         from sys_role_menus
         where role_id=#{id}
     </select>
+    <select id="findMenuIdsByRoleIds"
+            resultType="int">
+        select menu_id
+        from sys_role_menus
+        where
+        <foreach collection="roleIds"
+                 separator="or"
+                 item="roleId">
+            role_id=#{roleId}
+        </foreach>
+    </select>
+
 </mapper>

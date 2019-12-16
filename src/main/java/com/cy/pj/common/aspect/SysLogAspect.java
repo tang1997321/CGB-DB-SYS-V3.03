@@ -2,6 +2,7 @@ package com.cy.pj.common.aspect;
 
 import com.cy.pj.common.annotation.RequestLog;
 import com.cy.pj.common.util.IPUtils;
+import com.cy.pj.common.util.ShiroUtil;
 import com.cy.pj.sys.entity.SysLog;
 import com.cy.pj.sys.service.SysLogService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -76,7 +77,7 @@ public class SysLogAspect {
 		//2.对信息进行封装(SysLog)
 		SysLog log = new SysLog();
 		log.setIp(IPUtils.getIpAddr());
-		log.setUsername("admin");
+		log.setUsername(ShiroUtil.getUsername());
 		log.setOperation(operation);
 		log.setMethod(targetClassMethod);
 		log.setParams(params);

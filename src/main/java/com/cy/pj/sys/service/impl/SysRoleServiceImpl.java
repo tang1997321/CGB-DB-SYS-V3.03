@@ -15,9 +15,11 @@ import com.cy.pj.sys.vo.SysRoleMenuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
+
 public class SysRoleServiceImpl implements SysRoleService {
 	@Autowired(required = false)
 	private SysRoleDao sysRoleDao;
@@ -98,6 +100,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		Assert.isEmpty(entity.getName(), "角色名不允许为空");
 		Assert.isEmpty(menuIds, "必须为角色分配权限");
 		//2.添加数据
+		System.out.println(entity + Arrays.toString(menuIds));
 		int rows = sysRoleDao.updateObject(entity);
 		sysRoleMenuDao.deleteById("sys_role_menus", "role_id", entity.getId());
 		sysRoleMenuDao.insertObjects(entity.getId(), menuIds);

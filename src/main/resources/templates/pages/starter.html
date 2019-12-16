@@ -423,13 +423,14 @@ desired effect
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script type="text/javascript">
-    //页面加载完成事件
+    //页面加载完成事件fc.g
     $(function () {
         doLoadUI("load-log-id", "log/log_list");
         doLoadUI("load-menu-id", "menu/menu_list");
         doLoadUI("load-role-id", "menu/role_list");
         doLoadUI("load-dept-id", "menu/dept_list");
         doLoadUI("load-user-id", "menu/user_list");
+        doLoadUI("load-pwd-id", "pwd/pwd_edit");
     });
 
     //基于某个对象click事件,执行资源加载操作
