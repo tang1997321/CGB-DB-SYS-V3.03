@@ -44,7 +44,7 @@ createdTime,modifiedTime,createdUser,modifiedUser)
         where
         <foreach collection="menuIds"
                  separator="or"
-                 item="mwnuId">
+                 item="menuId">
             id =#{menuId}
         </foreach>
     </select>
