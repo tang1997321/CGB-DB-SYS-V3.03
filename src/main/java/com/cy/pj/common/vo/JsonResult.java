@@ -1,5 +1,6 @@
 package com.cy.pj.common.vo;
 
+import com.cy.pj.common.util.ShiroUtil;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,6 +1,8 @@
 package com.cy.pj.sys.controller;
 
+import com.cy.pj.common.util.ShiroUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,15 +37,16 @@ public class PageController {
 	public String doLoginUI() {
 		return "login";
 	}
-	
+
 	@RequestMapping("doIndexUI")
-	public String doGoodsUI() {
+	public String doGoodsUI(Model model) {
 		//记录页面访问次数(原子性)
 		String tName = Thread.currentThread().getName();
 		System.out.println("thread.tname=" + tName);
 		System.out.println(al.incrementAndGet());
+		model.addAttribute("username", ShiroUtil.getUsername());
 		return "starter";
-	}
+}
 
 //	@RequestMapping("log/log_list")
 //	public String doLogUI() {

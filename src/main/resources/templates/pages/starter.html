@@ -184,7 +184,7 @@ desired effect
                             <!-- The user image in the navbar-->
                             <img alt="User Image" class="user-image" src="dist/img/user2-160x160.jpg">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs" id="loginUserId">Alexander Pierce</span>
+                            <span class="hidden-xs" id="loginUserId">[[${username}]]</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -431,6 +431,7 @@ desired effect
         doLoadUI("load-dept-id", "menu/dept_list");
         doLoadUI("load-user-id", "menu/user_list");
         doLoadUI("load-pwd-id", "pwd/pwd_edit");
+        // doLoadUser();
     });
 
     //基于某个对象click事件,执行资源加载操作
@@ -442,6 +443,15 @@ desired effect
             $("#mainContentId").load(url)
         })
     }
+    //
+    // function doLoadUser() {
+    //     var url = "user/doGetLoginUser"
+    //     $.getJson(url, function (result) {
+    //         if (result.state === 1) {
+    //             ${loginUserId}.html = result.data.username;
+    //         }
+    //     })
+    // }
 </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.cy.pj.sys.controller;
 
+import com.cy.pj.common.util.ShiroUtil;
 import com.cy.pj.common.vo.JsonResult;
 import com.cy.pj.sys.entity.SysUser;
 import com.cy.pj.sys.service.SysUserService;
@@ -58,12 +59,19 @@ public class SysUserController {
 	}
 	
 	@RequestMapping("doLogin")
-	public JsonResult doLogin(String username, String password) {
+	public JsonResult doLogin(String username, String password, boolean isRememberMe) {
 		Subject subject = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		token.setRememberMe(isRememberMe);
 		subject.login(token);//提交给securityManager
 		return new JsonResult("login ok");
 	}
+	
+//	@RequestMapping("doGetLoginUser")
+//	public JsonResult doGetLoginUser() {
+//		String username = ShiroUtil.getUsername();
+//		return new JsonResult(username);
+//	}
 	
 	@RequestMapping("doUpdatePassword")
 	public JsonResult doUpdatePassword(String pwd, String newPwd, String cfgPwd) {
