@@ -1,5 +1,7 @@
 package com.cy.pj.common.config;
 
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
@@ -23,9 +25,11 @@ public class SpringShiroConfig {
 	 * 此对象时,默认会以方法名为key
 	 */
 	@Bean
-	public SecurityManager securityManager(Realm realm) {
+	public SecurityManager securityManager(Realm realm,CacheManager cacheManager) {
 		DefaultWebSecurityManager sManager = new DefaultWebSecurityManager();
 		sManager.setRealm(realm);
+		//将shiro中的cache管理器注入给SecurityManager
+		sManager.setCacheManager(cacheManager);
 		return sManager;
 	}
 
@@ -76,4 +80,12 @@ public class SpringShiroConfig {
 		return advisor;
 	}
 	
+	/**
+	 * 配置shiro中缓存管理器对象
+	 * @return
+	 */
+	@Bean
+	public CacheManager shiroCacheManager(){
+		return new MemoryConstrainedCacheManager();
+	}
 }
