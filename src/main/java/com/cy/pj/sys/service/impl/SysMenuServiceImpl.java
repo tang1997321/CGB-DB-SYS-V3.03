@@ -45,20 +45,20 @@ public class SysMenuServiceImpl implements SysMenuService {
 		if (childCount > 0)
 			throw new ServiceException("请先删除子菜单");
 		//3.删除角色菜单关系数据
-		sysRoleMenuDao.deleteById("sys_role_menus","menu_id",id);
+		sysRoleMenuDao.deleteById("sys_role_menus", "menu_id", id);
 		//4.删除菜单自身数据
 		int rows = sysMenuDao.deleteObject(id);
 		if (rows == 0)
 			throw new ServiceException("记录已经不存在");
 		//5.返回结果
 		return rows;
- 	}
+	}
 	
 	/**
-	 * @Cacheable 注解描述方法是,表示要从cache取数据,cache没有调用业务方法查数据
+	 * @return
+	 * @Cacheable 注解描述方法是, 表示要从cache取数据, cache没有调用业务方法查数据
 	 * 查到数据放到cache中(cache底层实现了一个map接口)
 	 * 1)value表示cache的名字
-	 * @return
 	 */
 	@Cacheable(value = "menuCache")//spring框架负责提供cache;ConcurrentHashMap
 	@Override
@@ -80,8 +80,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 	@RequestLog(operation = "保存菜单")
 	public int saveObject(SysMenu entity) {
 		//1.参数校验
-		Assert.isNull(entity,"保存对象不能为空");
-		Assert.isEmpty(entity.getName(),"菜单名不能为空");
+		Assert.isNull(entity, "保存对象不能为空");
+		Assert.isEmpty(entity.getName(), "菜单名不能为空");
 		//2.持久化数据
 		int rows = sysMenuDao.insertObject(entity);
 		//3.返回结果
@@ -111,6 +111,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 		Assert.isValid(id > 0 && id != null, "id值无效");
 		List<Integer> roleIds = sysUserRoleDao.findRoleIdsByUserId(id);
 		List<Integer> menuIds = sysRoleMenuDao.findMenuIdsByRoleIds(roleIds.toArray(new Integer[]{}));
-		return sysMenuDao.findMenusByIds(menuIds);
+		List<SysRoleMenuVo> menusByIds = sysMenuDao.findMenusByIds(menuIds);
+		menuIds.forEach(System.out::println);
+		return menusByIds;
 	}
 }

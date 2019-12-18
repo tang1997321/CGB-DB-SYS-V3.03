@@ -48,29 +48,39 @@ createdTime,modifiedTime,createdUser,modifiedUser)
             id =#{menuId}
         </foreach>
     </select>
-    <resultMap id="findMenuInfo" type="com.cy.pj.sys.vo.SysUserMenuVo">
+    <resultMap type="com.cy.pj.sys.vo.SysUserMenuVo"
+               id="sysUserMenuVo">
         <id property="id" column="id"/>
-        <collection property="childMenus" column="id" select="findChildMenusById">
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+        <collection property="childMenus"
+                    ofType="com.cy.pj.sys.vo.SysUserMenuVo">
+            <id property="id" column="cid"/>
+            <result property="name" column="cname"/>
+            <result property="url" column="curl"/>
         </collection>
     </resultMap>
-    <select id="findChildMenusById"
-            resultType="com.cy.pj.sys.vo.SysUserMenuVo">
-           select id,name,url
-           from sys_menus
-           where parentId=#{id} and type=1
-    </select>
-    <select id="findMenusByIds" resultMap="findMenuInfo">
-        select id,name,url
-        from sys_menus
+    <!-- <select id="findChildMenusById"
+             resultType="com.cy.pj.sys.vo.SysUserMenuVo">
+            select id,name,url
+            from sys_menus
+            where parentId=#{id} and type=1
+     </select>-->
+    <!--基于菜单id查找一级菜单并且其类型为菜单-->
+    <select id="findMenusByIds"
+            resultMap="sysUserMenuVo">
+        select p.id,p.name,p.url,c.id cid,c.name cname,c.url curl
+        from sys_menus p join sys_menus c
+        on c.parentId=p.id
         <where>
             <foreach collection="menuIds"
                      open="("
                      close=")"
                      separator="or"
-                     item="id">
-                id=#{id}
+                     item="menuId">
+                c.id=#{menuId}
             </foreach>
-            and (parentId is null and type =1)
+            and p.parentId is null
         </where>
     </select>
 </mapper>
