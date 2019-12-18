@@ -6,14 +6,14 @@ import com.cy.pj.common.util.Assert;
 import com.cy.pj.common.vo.Node;
 import com.cy.pj.sys.dao.SysMenuDao;
 import com.cy.pj.sys.dao.SysRoleMenuDao;
+import com.cy.pj.sys.dao.SysUserRoleDao;
 import com.cy.pj.sys.entity.SysMenu;
 import com.cy.pj.sys.service.SysMenuService;
+import com.cy.pj.sys.vo.SysRoleMenuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -24,15 +24,17 @@ public class SysMenuServiceImpl implements SysMenuService {
 	private SysMenuDao sysMenuDao;
 	@Autowired(required = false)
 	private SysRoleMenuDao sysRoleMenuDao;
+	@Autowired
+	private SysUserRoleDao sysUserRoleDao;
 	
 	/**
-	 * @CacheEvict 描述方法是,表示要清除缓存
-	 * 1)value:表示缓存名称
-	 * 2)allEntries:表示清空所有缓存
 	 * @param id
 	 * @return
+	 * @CacheEvict 描述方法是, 表示要清除缓存
+	 * 1)value:表示缓存名称
+	 * 2)allEntries:表示清空所有缓存
 	 */
-	@CacheEvict(value = "menuCache",allEntries = true)
+	@CacheEvict(value = "menuCache", allEntries = true)
 	@Override
 	@RequestLog(operation = "删除菜单")
 	public int deleteObject(Integer id) {
@@ -85,15 +87,30 @@ public class SysMenuServiceImpl implements SysMenuService {
 		//3.返回结果
 		return rows;
 	}
+	
 	@Override
 	@RequestLog(operation = "更新菜单")
 	public int updateObject(SysMenu entity) {
 		//1.参数校验
-		Assert.isNull(entity,"保存对象不能为空");
-		Assert.isEmpty(entity.getName(),"菜单名不能为空");
+		Assert.isNull(entity, "保存对象不能为空");
+		Assert.isEmpty(entity.getName(), "菜单名不能为空");
 		//2.持久化数据
 		int rows = sysMenuDao.updateObject(entity);
 		//3.返回结果
 		return rows;
+	}
+	
+	/**
+	 * 动态菜单数据获取
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public List<SysRoleMenuVo> findUserMenusByUserId(Integer id) {
+		Assert.isValid(id > 0 && id != null, "id值无效");
+		List<Integer> roleIds = sysUserRoleDao.findRoleIdsByUserId(id);
+		List<Integer> menuIds = sysRoleMenuDao.findMenuIdsByRoleIds(roleIds.toArray(new Integer[]{}));
+		return sysMenuDao.findMenusByIds(menuIds);
 	}
 }

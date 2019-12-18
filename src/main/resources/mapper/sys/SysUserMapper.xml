@@ -70,6 +70,11 @@
             modifiedUser=#{modifiedUser}
          where id=#{id}
    </update>
-
+    <select id="findUserPremissions" resultType="string">
+        select m.permission
+        from sys_user_roles ur join sys_role_menus srm join sys_menus m
+        on ur.role_id = srm.role_id and m.id=srm.menu_id
+        where ur.user_id=#{id}
+    </select>
 
 </mapper>

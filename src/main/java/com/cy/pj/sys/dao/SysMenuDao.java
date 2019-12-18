@@ -2,7 +2,11 @@ package com.cy.pj.sys.dao;
 
 import com.cy.pj.common.vo.Node;
 import com.cy.pj.sys.entity.SysMenu;
-import org.apache.ibatis.annotations.*;
+import com.cy.pj.sys.vo.SysRoleMenuVo;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -52,10 +56,19 @@ public interface SysMenuDao {
 	
 	/**
 	 * 基于菜单id查找权限标识
+	 *
 	 * @param menuIds
 	 * @return
 	 */
 	List<String> findPermissions(
 			@Param("menuIds")
 					Integer[] menuIds);
+	
+	/**
+	 * 基于菜单id查询菜单信息
+	 *
+	 * @param menuIds
+	 * @return
+	 */
+	List<SysRoleMenuVo> findMenusByIds(@Param("menuIds") List<Integer> menuIds);
 }

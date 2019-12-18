@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.sql.SQLSyntaxErrorException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,10 +34,9 @@ public class ShiroUserRealm extends AuthorizingRealm {
 	private SysMenuDao sysMenuDao;
 	
 	
-
-/**
- * 此方法负责用户信息的获取以及封装
- */
+	/**
+	 * 此方法负责用户信息的获取以及封装
+	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		//1.获取用户端输入的用户信息
@@ -62,7 +60,7 @@ public class ShiroUserRealm extends AuthorizingRealm {
 		//6.返回封装结果
 		return info;//返回值会传递给认证管理器(SecurityManager)(后续认证管理器会通过此信息完成认证操作)
 	}
-
+	
 	/**
 	 * 设置加密算法
 	 * 设置凭证匹配器(与用户添加操作使用相同的加密算法)
@@ -77,24 +75,21 @@ public class ShiroUserRealm extends AuthorizingRealm {
 		cMatcher.setHashIterations(1);
 		super.setCredentialsMatcher(cMatcher);
 	}
-
+	
+	/**
+	 * 用户权限多表联查方式
+	 *
+	 * @param principals
+	 * @return
+	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		//1.获取登录用户id
 		SysUser user = (SysUser) principals.getPrimaryPrincipal();
 		Integer userId = user.getId();
 		//2.基于用户id获取用户对应的角色id
-		List<Integer> roleIds = sysUserRoleDao.findRoleIdsByUserId(userId);
-		if (roleIds == null || roleIds.size() == 0) {
-			throw new AuthorizationException();
-		}
-		//3.基于角色id获取用户对应的菜单id
-		Integer[] array = {};//定义整数数组类型
-		List<Integer> menuIds = sysRoleMenuDao.findMenuIdsByRoleIds(roleIds.toArray(array));
-		if (menuIds == null || menuIds.size() == 0)
-			throw new AuthorizationException();
-		//4.基于菜单id获取授权标识
-		List<String> permissions = sysMenuDao.findPermissions(menuIds.toArray(array));
+		List<String> permissions = sysUserDao.findUserPremissions(userId);
+		System.out.println(permissions);
 		if (permissions == null || permissions.size() == 0)
 			throw new AuthorizationException();
 		//封装查询结果
@@ -108,4 +103,35 @@ public class ShiroUserRealm extends AuthorizingRealm {
 		info.setStringPermissions(setPermissions);
 		return info;
 	}
+
+//	@Override
+//	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+//		//1.获取登录用户id
+//		SysUser user = (SysUser) principals.getPrimaryPrincipal();
+//		Integer userId = user.getId();
+//		//2.基于用户id获取用户对应的角色id
+//		List<Integer> roleIds = sysUserRoleDao.findRoleIdsByUserId(userId);
+//		if (roleIds == null || roleIds.size() == 0) {
+//			throw new AuthorizationException();
+//		}
+//		//3.基于角色id获取用户对应的菜单id
+//		Integer[] array = {};//定义整数数组类型
+//		List<Integer> menuIds = sysRoleMenuDao.findMenuIdsByRoleIds(roleIds.toArray(array));
+//		if (menuIds == null || menuIds.size() == 0)
+//			throw new AuthorizationException();
+//		//4.基于菜单id获取授权标识
+//		List<String> permissions = sysMenuDao.findPermissions(menuIds.toArray(array));
+//		if (permissions == null || permissions.size() == 0)
+//			throw new AuthorizationException();
+//		//封装查询结果
+//		Set<String> setPermissions = new HashSet<>();
+//		for (String per : permissions) {
+//			if (!StringUtils.isEmpty(per)) {
+//				setPermissions.add(per);
+//			}
+//		}
+//		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+//		info.setStringPermissions(setPermissions);
+//		return info;
+//	}
 }

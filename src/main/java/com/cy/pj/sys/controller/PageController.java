@@ -1,6 +1,8 @@
 package com.cy.pj.sys.controller;
 
 import com.cy.pj.common.util.ShiroUtil;
+import com.cy.pj.sys.service.SysMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/")
 public class PageController {
 	private AtomicLong al = new AtomicLong(0);
+	@Autowired
+	private SysMenuService sysMenuService;
 	
 	public PageController() {
 		//此类型的对象线程安全?(如何保证的?底层CAS算法-借助CPU硬件优势)
@@ -37,7 +41,7 @@ public class PageController {
 	public String doLoginUI() {
 		return "login";
 	}
-
+	
 	@RequestMapping("doIndexUI")
 	public String doGoodsUI(Model model) {
 		//记录页面访问次数(原子性)
@@ -45,8 +49,9 @@ public class PageController {
 		System.out.println("thread.tname=" + tName);
 		System.out.println(al.incrementAndGet());
 		model.addAttribute("username", ShiroUtil.getUsername());
+		model.addAttribute("userMenus", sysMenuService.findUserMenusByUserId(ShiroUtil.getLoginUser().getId()));
 		return "starter";
-}
+	}
 
 //	@RequestMapping("log/log_list")
 //	public String doLogUI() {

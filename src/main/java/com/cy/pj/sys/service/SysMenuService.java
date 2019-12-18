@@ -2,6 +2,7 @@ package com.cy.pj.sys.service;
 
 import com.cy.pj.common.vo.Node;
 import com.cy.pj.sys.entity.SysMenu;
+import com.cy.pj.sys.vo.SysRoleMenuVo;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,6 @@ public interface SysMenuService {
 	 * @return
 	 */
 	int updateObject(SysMenu entity);
+	
+	List<SysRoleMenuVo> findUserMenusByUserId(Integer id);
 }

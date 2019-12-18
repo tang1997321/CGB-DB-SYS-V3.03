@@ -48,5 +48,29 @@ createdTime,modifiedTime,createdUser,modifiedUser)
             id =#{menuId}
         </foreach>
     </select>
-
+    <resultMap id="findMenuInfo" type="com.cy.pj.sys.vo.SysUserMenuVo">
+        <id property="id" column="id"/>
+        <collection property="childMenus" column="id" select="findChildMenusById">
+        </collection>
+    </resultMap>
+    <select id="findChildMenusById"
+            resultType="com.cy.pj.sys.vo.SysUserMenuVo">
+           select id,name,url
+           from sys_menus
+           where parentId=#{id} and type=1
+    </select>
+    <select id="findMenusByIds" resultMap="findMenuInfo">
+        select id,name,url
+        from sys_menus
+        <where>
+            <foreach collection="menuIds"
+                     open="("
+                     close=")"
+                     separator="or"
+                     item="id">
+                id=#{id}
+            </foreach>
+            and (parentId is null and type =1)
+        </where>
+    </select>
 </mapper>

@@ -22,6 +22,12 @@ public interface SysUserDao extends BaseDao {
 	 */
 	int validById(Integer id, Integer valid, String modifiedUser);
 	
+	/**
+	 * 获取行数
+	 *
+	 * @param username
+	 * @return
+	 */
 	int getRowCount(@Param("username") String username);
 	
 	/**
@@ -59,6 +65,7 @@ public interface SysUserDao extends BaseDao {
 	
 	/**
 	 * 基于用户名查找用户信息
+	 *
 	 * @param username
 	 * @return
 	 */
@@ -67,4 +74,12 @@ public interface SysUserDao extends BaseDao {
 	
 	@Update("update sys_users set password=#{newPassword},salt=#{salt},modifiedTime=now() where id=#{id}")
 	int updatePassword(@Param("newPassword") String newPassword, @Param("salt") String salt, @Param("id") Integer id);
+	
+	/**
+	 * 多表联查用户权限
+	 *
+	 * @param userId
+	 * @return
+	 */
+	List<String> findUserPremissions(@Param("id") Integer userId);
 }
